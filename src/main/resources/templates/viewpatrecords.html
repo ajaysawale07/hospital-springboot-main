@@ -1,0 +1,212 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Doctor Medical Records</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/common.css}">-->
+<!--    <style>-->
+<!--        table {-->
+<!--            width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--        }-->
+<!--        table, th, td {-->
+<!--            border: 1px solid black;-->
+<!--            padding: 10px;-->
+<!--        }-->
+<!--        th {-->
+<!--            background-color: lightgray;-->
+<!--        }-->
+<!--        .no-records {-->
+<!--            margin: 20px 0;-->
+<!--            padding: 15px;-->
+<!--            background-color: #f8f9fa;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+<!--        .action-links {-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--        .action-links a {-->
+<!--            text-decoration: none;-->
+<!--            padding: 5px 10px;-->
+<!--        }-->
+<!--        .create-button {-->
+<!--            display: inline-block;-->
+<!--            margin: 10px 0;-->
+<!--            padding: 8px 16px;-->
+<!--            background-color: #4CAF50;-->
+<!--            color: white;-->
+<!--            text-decoration: none;-->
+<!--            border-radius: 4px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<header class="main-header">-->
+<!--    <div>-->
+<!--        <span class="hospital-name">Aloppo Hospitals</span>-->
+<!--        <span class="system-name">Management System</span>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--<h2>Welcome, <span th:text="${patient.user.name}">patient Name</span>!</h2>-->
+
+<!--<h3>Patient Medical Records</h3>-->
+
+<!--<div th:if="${success}" style="color: green; margin: 10px 0;">-->
+<!--    <p th:text="${success}">Success message</p>-->
+<!--</div>-->
+
+
+<!--<div th:if="${medicalRecords.empty}" class="no-records">-->
+<!--    <p>No medical records found for your patients.</p>-->
+<!--</div>-->
+
+<!--<div th:unless="${medicalRecords.empty}">-->
+<!--    <table>-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Record ID</th>-->
+<!--            <th>Admission Date</th>-->
+<!--            <th>Discharge Date</th>-->
+<!--            <th>Treatment Details</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="record : ${medicalRecords}">-->
+<!--            <td th:text="${record.recordId}"></td>-->
+<!--            <td th:text="${#dates.format(record.admissionDate, 'yyyy-MM-dd')}"></td>-->
+<!--            <td th:text="${record.dischargeDate != null ? #dates.format(record.dischargeDate, 'yyyy-MM-dd') : 'Not discharged'}"></td>-->
+<!--            <td th:text="${record.treatmentDetails}"></td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+
+<!--<div class="action-links">-->
+<!--    <a th:href="@{/patient/viewapp}">View Appointments</a> |-->
+<!--    <a th:href="@{/patient/dashboard}">View Dashboard</a> |-->
+<!--    <a th:href="@{/logout}">Logout</a>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Doctor Medical Records</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .hospital-name {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+        .system-name {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .no-records {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .success-message {
+            color: green;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .action-links {
+            margin-top: 30px;
+        }
+        .action-links a {
+            text-decoration: none;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 4px;
+            color: #3498db;
+            font-weight: bold;
+        }
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header class="main-header">
+    <div>
+        <span class="hospital-name">Aloppo Hospitals</span>
+        <span class="system-name">Management System</span>
+    </div>
+</header>
+
+<h2>Welcome, <span th:text="${patient.user.name}">Patient Name</span>!</h2>
+
+<h3>Patient Medical Records</h3>
+
+<div th:if="${success}" class="success-message">
+    <p th:text="${success}">Success message</p>
+</div>
+
+<div th:if="${medicalRecords.empty}" class="no-records">
+    <p>No medical records found for your patients.</p>
+</div>
+
+<div th:unless="${medicalRecords.empty}">
+    <table>
+        <thead>
+        <tr>
+            <th>Record ID</th>
+            <th>Admission Date</th>
+            <th>Discharge Date</th>
+            <th>Treatment Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record : ${medicalRecords}">
+            <td th:text="${record.recordId}"></td>
+            <td th:text="${#dates.format(record.admissionDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${record.dischargeDate != null ? #dates.format(record.dischargeDate, 'yyyy-MM-dd') : 'Not discharged'}"></td>
+            <td th:text="${record.treatmentDetails}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="action-links">
+    <a th:href="@{/patient/viewapp}">View Appointments</a>
+    <a th:href="@{/patient/dashboard}">View Dashboard</a>
+    <a th:href="@{/logout}">Logout</a>
+</div>
+</body>
+</html>

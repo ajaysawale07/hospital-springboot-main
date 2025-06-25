@@ -1,0 +1,210 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Dashboard</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/common.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/dashboard.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div class="dashboard-container">-->
+<!--        <div class="welcome-header">-->
+<!--            <h2>Welcome, <span th:text="${user.name}"></span>!</h2>-->
+<!--            <p class="role-badge">Role: <span th:text="${user.role}"></span></p>-->
+<!--        </div>-->
+<!--        -->
+<!--        <ul class="menu-list">-->
+<!--            <li><a href="/receptionist/registerusers">Register Patients</a></li>-->
+<!--            <li><a href="/receptionist/bookslot">Book Appointments</a></li>-->
+<!--        </ul>-->
+
+<!--        <form action="/logout" method="get" class="logout-form">-->
+<!--            <button type="submit" class="logout-button">Logout</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Receptionist Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --danger-color: #ef4444;
+            --danger-dark: #dc2626;
+            --text-color: #1e293b;
+            --text-light: #64748b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .welcome-header {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .welcome-header h2 {
+            color: var(--primary-dark);
+            margin: 0 0 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: var(--primary-dark);
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .menu-list li {
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-list li:hover {
+            transform: translateY(-0.25rem);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-list a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 8rem;
+            padding: 1rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-align: center;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .menu-list a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-list a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-list li:hover a::before {
+            opacity: 1;
+        }
+
+        .logout-form {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .logout-button {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 180px;
+        }
+
+        .logout-button:hover {
+            background-color: var(--danger-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .welcome-header {
+                padding: 1.5rem;
+            }
+
+            .menu-list {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-list a {
+                height: 6rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="welcome-header">
+        <h2>Welcome, <span th:text="${user.name}"></span>!</h2>
+        <p class="role-badge">Role: <span th:text="${user.role}"></span></p>
+    </div>
+
+    <ul class="menu-list">
+        <li><a href="/receptionist/registerusers">Register Patients</a></li>
+        <li><a href="/receptionist/bookslot">Book Appointments</a></li>
+    </ul>
+
+    <form action="/logout" method="get" class="logout-form">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+</div>
+</body>
+</html>

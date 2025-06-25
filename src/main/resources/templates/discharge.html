@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Patient Discharge Summary</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .hospital-info {
+            text-align: right;
+        }
+        .patient-info {
+            margin-bottom: 30px;
+        }
+        .bill-details {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .bill-details, .bill-details th, .bill-details td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        .bill-details th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .bill-details tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #e6f7ff !important;
+        }
+        .action-links {
+            margin-top: 30px;
+        }
+        .action-links a {
+            text-decoration: none;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        .print-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .back-button {
+            background-color: #2196F3;
+            color: white;
+        }
+        .discharge-date {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div>
+        <span class="hospital-name">Aloppo Hospitals</span>
+        <span class="system-name">Management System</span>
+    </div>
+</header>
+
+<div class="header">
+    <div>
+        <h2>Discharge Summary</h2>
+        <p th:text="'Doctor: ' + ${doctor.user.name}"></p>
+    </div>
+    <div class="hospital-info">
+        <h3>Generated Bill</h3>
+        <p>Discharge Date: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span></p>
+    </div>
+</div>
+
+<div class="patient-info">
+    <h3>Patient Information</h3>
+    <p th:text="'Name: ' + ${record.patient.user.name}"></p>
+    <p th:text="'Admission Date: ' + ${#dates.format(record.admissionDate, 'yyyy-MM-dd')}"></p>
+    <p th:text="'Discharge Date: ' + ${#dates.format(record.dischargeDate, 'yyyy-MM-dd')}"></p>
+</div>
+
+<div class="discharge-date">
+    <p>Patient was admitted for <span th:text="${days} + ' days'"></span></p>
+</div>
+
+<h3>Bill Details</h3>
+<table class="bill-details">
+    <thead>
+    <tr>
+        <th>Description</th>
+        <th>Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Doctor Consultation Fee</td>
+        <td th:text="${doctoram}"></td>
+    </tr>
+    <tr>
+        <td>Bed Charges (<span th:text="${days} + ' days'"></span>)</td>
+        <td th:text="${bedam}"></td>
+    </tr>
+    <tr th:each="test : ${tests}">
+        <td th:text="'Test - ' + ${test.test.name}"></td>
+        <td th:text="${test.test.cost}"></td>
+    </tr>
+    <tr class="total-row">
+        <td>Total Amount</td>
+        <td th:text="${totalam}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="action-links">
+    <a href="#" onclick="window.print()" class="print-button">Print Bill</a>
+    <a th:href="@{/doctor/viewrecords}" class="back-button">Back to Records</a>
+</div>
+</body>
+</html>

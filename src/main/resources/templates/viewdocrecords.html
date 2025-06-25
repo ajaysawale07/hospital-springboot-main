@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Doctor Medical Records</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        th {
+            background-color: lightgray;
+        }
+        .no-records {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .action-links {
+            margin-top: 20px;
+        }
+        .action-links a {
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        .create-button {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<header class="main-header">
+    <div>
+        <span class="hospital-name">Aloppo Hospitals</span>
+        <span class="system-name">Management System</span>
+    </div>
+</header>
+
+<h2>Welcome, <span th:text="${doctor.user.name}">Doctor Name</span>!</h2>
+
+<h3>Patient Medical Records</h3>
+
+<div th:if="${success}" style="color: green; margin: 10px 0;">
+    <p th:text="${success}">Success message</p>
+</div>
+
+<a th:href="@{/doctor/createrecord}" class="create-button">Create New Record</a>
+
+<div th:if="${medicalRecords.empty}" class="no-records">
+    <p>No medical records found for your patients.</p>
+</div>
+
+<div th:unless="${medicalRecords.empty}">
+    <table>
+        <thead>
+        <tr>
+            <th>Record ID</th>
+            <th>Patient</th>
+            <th>Admission Date</th>
+            <th>Discharge Date</th>
+            <th>Treatment Details</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="record : ${medicalRecords}">
+                <td th:text="${record.recordId}"></td>
+                <td th:text="${record.patient.user.name}"></td>
+                <td th:text="${#dates.format(record.admissionDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${record.dischargeDate != null ? #dates.format(record.dischargeDate, 'yyyy-MM-dd') : 'Not discharged'}"></td>
+                <td th:text="${record.treatmentDetails}"></td>
+                <td>
+                    <a th:if="${record.dischargeDate == null}" 
+                       th:href="@{/doctor/dischargepatient/{id}(id=${record.recordId})}">Discharge</a>
+                    <span th:unless="${record.dischargeDate == null}">Discharged</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="action-links">
+    <a th:href="@{/doctor/viewapp}">View Appointments</a> |
+    <a th:href="@{/doctor/dashboard}">View Dashboard</a> |
+    <a th:href="@{/logout}">Logout</a>
+</div>
+</body>
+</html>

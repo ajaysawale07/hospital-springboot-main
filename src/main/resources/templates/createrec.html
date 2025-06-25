@@ -1,0 +1,281 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Create Medical Record</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/common.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/forms.css}">-->
+<!--</head>-->
+<!--<body>-->
+<!--<header class="main-header">-->
+<!--    <div>-->
+<!--        <span class="hospital-name">Aloppo Hospitals</span>-->
+<!--        <span class="system-name">Management System</span>-->
+<!--    </div>-->
+<!--</header>-->
+<!--    <div class="form-container">-->
+<!--        <h2 class="form-title">Create Medical Record</h2>-->
+
+<!--        <form th:action="@{/doctor/createrecord}" method="post">-->
+<!--            <div class="form-section">-->
+<!--                <h3>Patient Information</h3>-->
+<!--                <div class="form-group">-->
+<!--                    <label>Select Patient:</label>-->
+<!--                    <select name="patient.patientId" class="form-control" required>-->
+<!--                        <option value="">&#45;&#45; Select Patient &#45;&#45;</option>-->
+<!--                        <option th:each="appointment : ${doctorAppointments}"-->
+<!--                                th:value="${appointment.patient.patientId}"-->
+<!--                                th:text="${appointment.patient.user.name + ' (ID: ' + appointment.patient.patientId + ')'}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="form-section">-->
+<!--                <h3>Medical Record Details</h3>-->
+<!--                <div class="form-group">-->
+<!--                    <label>Admission Date:</label>-->
+<!--                    <input type="date" name="admissionDate" class="form-control" required-->
+<!--                           th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">-->
+<!--                </div>-->
+
+<!--                <div class="form-group">-->
+<!--                    <label>Treatment Details:</label>-->
+<!--                    <textarea name="treatmentDetails" class="form-control" rows="6" required-->
+<!--                              placeholder="Enter diagnosis, prescribed medications, treatment plan, and any other relevant information"></textarea>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="form-section">-->
+<!--                <h3>Prescribed Tests</h3>-->
+<!--                <div class="form-group">-->
+<!--                    <div th:each="test : ${availableTests}" style="margin: 10px 0;">-->
+<!--                        <input type="checkbox" name="testIds" th:value="${test.testId}" class="test-checkbox">-->
+<!--                        <label th:text="${test.name + ' - $' + test.cost}" class="test-label"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <input type="hidden" name="dischargeDate" value="">-->
+<!--            <button type="submit" class="submit-button">Create Medical Record</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Medical Record</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f0f4f8;
+            color: #2d3748;
+        }
+
+        .main-header {
+            background-color: #2b6cb0;
+            color: white;
+            padding: 20px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .hospital-name {
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .system-name {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-title {
+            color: #2b6cb0;
+            font-size: 28px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #bee3f8;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 5px solid #4299e1;
+        }
+
+        .form-section h3 {
+            margin-top: 0;
+            color: #3182ce;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #63b3ed;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.3);
+        }
+
+        select.form-control {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .test-checkbox {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: #4299e1;
+        }
+
+        .test-label {
+            font-weight: 500;
+            color: #4a5568;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .test-label:hover {
+            color: #3182ce;
+        }
+
+        .submit-button {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-button:hover {
+            background-color: #3182ce;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+                margin: 0 15px 30px;
+            }
+
+            .main-header {
+                padding: 15px 20px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="main-header">
+    <div>
+        <span class="hospital-name">Aloppo Hospitals</span>
+        <span class="system-name">Management System</span>
+    </div>
+</header>
+<div class="form-container">
+    <h2 class="form-title">Create Medical Record</h2>
+
+    <form th:action="@{/doctor/createrecord}" method="post">
+        <div class="form-section">
+            <h3>Patient Information</h3>
+            <div class="form-group">
+                <label>Select Patient:</label>
+                <select name="patient.patientId" class="form-control" required>
+                    <option value="">-- Select Patient --</option>
+                    <option th:each="appointment : ${doctorAppointments}"
+                            th:value="${appointment.patient.patientId}"
+                            th:text="${appointment.patient.user.name + ' (ID: ' + appointment.patient.patientId + ')'}">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Medical Record Details</h3>
+            <div class="form-group">
+                <label>Admission Date:</label>
+                <input type="date" name="admissionDate" class="form-control" required
+                       th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            </div>
+
+            <div class="form-group">
+                <label>Treatment Details:</label>
+                <textarea name="treatmentDetails" class="form-control" rows="6" required
+                          placeholder="Enter diagnosis, prescribed medications, treatment plan, and any other relevant information"></textarea>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Prescribed Tests</h3>
+            <div class="form-group">
+                <div th:each="test : ${availableTests}" style="margin: 12px 0;">
+                    <input type="checkbox" name="testIds" th:value="${test.testId}" class="test-checkbox" id="test_${test.testId}">
+                    <label th:text="${test.name + ' - $' + test.cost}" class="test-label" th:for="'test_' + ${test.testId}"></label>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="dischargeDate" value="">
+        <button type="submit" class="submit-button">Create Medical Record</button>
+    </form>
+</div>
+</body>
+</html>
